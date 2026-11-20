@@ -10,7 +10,8 @@ public class Main {
     System.out.println("Logs from your program will appear here!");
 
     int port = 6379;
-    try (ServerSocket serverSocket = new ServerSocket(port);) {
+    try (ServerSocket serverSocket = new ServerSocket(port);
+  ) {
       serverSocket.setReuseAddress(true);
       // Wait for connection from client.
       while (true) {
@@ -26,15 +27,15 @@ public class Main {
   private static void handleClient(Socket clientSocket) {
     try (Socket client = clientSocket) {
 
-      InputStream inputStream = clientSocket.getInputStream();
+      InputStream inputStream = client.getInputStream();
 
       byte[] buffer = new byte[1024];
       int bytesRead;
 
       while ((bytesRead = inputStream.read(buffer)) != -1) {
-        clientSocket.getOutputStream().write("+PONG\r\n".getBytes());
+        client.getOutputStream().write("+PONG\r\n".getBytes());
       }
-    } catch (IOException) {
+    } catch (IOException e) {
               System.out.println("Client connection error: " + e.getMessage());
 
     }
